@@ -1,0 +1,5 @@
+{
+  "name": "CHECK - GL",
+  "description": "Um aplicativo completo para gerenciar listas de presença em eventos com estatísticas detalhadas e gráficos intuitivos.",
+  "requestFramePermissions": []
+}
