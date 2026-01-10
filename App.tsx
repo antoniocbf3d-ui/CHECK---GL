@@ -37,6 +37,26 @@ import 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import { AttendanceStatus, Attendee, Event, ViewState, Person } from './types';
 
+// --- COMPONENTS: LOGO ---
+
+const CheckGLLogo = ({ variant = 'full', className = "" }: { variant?: 'full' | 'icon' | 'white', className?: string }) => {
+  const primaryColor = variant === 'white' ? '#FFFFFF' : '#001F3F';
+  
+  return (
+    <div className={`flex items-center gap-3 ${className}`}>
+      <svg viewBox="0 0 120 120" className="h-10 w-10 flex-shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M60 110C60 110 20 70 20 45C20 22.9086 37.9086 5 60 5C82.0914 5 100 22.9086 100 45C100 70 60 110 60 110Z" fill={primaryColor} />
+        <path d="M42 48L54 60L78 36" stroke={variant === 'white' ? '#001F3F' : 'white'} strokeWidth="10" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+      {variant !== 'icon' && (
+        <span className={`font-black text-xl tracking-tighter ${variant === 'white' ? 'text-white' : 'text-[#001f3f]'}`}>
+          CHECK <span className="opacity-60">-</span> GL
+        </span>
+      )}
+    </div>
+  );
+};
+
 // --- HELPERS ---
 
 const formatDate = (dateStr: string) => {
@@ -74,19 +94,7 @@ const getEventsInPeriod = (allEvents: Event[], title: string | null, period: 'cu
   return filtered.sort((a, b) => a.date.localeCompare(b.date));
 };
 
-// --- COMPONENTS ---
-
-const Logo = () => (
-  <div className="flex items-center gap-2">
-    <div className="bg-white p-1 rounded-xl shadow-sm">
-      <img 
-        src="https://generativelanguage.googleapis.com/v1beta/files/input_file_0.png" 
-        alt="CHECK - GL Logo" 
-        className="h-10 w-auto object-contain"
-      />
-    </div>
-  </div>
-);
+// --- CORE COMPONENTS ---
 
 const Header: React.FC<{ title: string | React.ReactNode, showBack?: boolean, onBack?: () => void, actions?: React.ReactNode }> = ({ title, showBack, onBack, actions }) => (
   <header className="sticky top-0 z-20 bg-[#001f3f] text-white p-4 shadow-md flex items-center justify-between">
@@ -134,7 +142,7 @@ const EventFormView: React.FC<{
       <div className="p-6 space-y-6">
         <div className="space-y-2">
           <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Título</label>
-          <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Ex: Ensaio de Louvor" className="w-full bg-gray-50 border-none p-4 rounded-3xl text-lg font-bold outline-none focus:ring-2 ring-indigo-500/20" />
+          <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Ex: Ensaio de Louvor" className="w-full bg-gray-50 border-none p-4 rounded-3xl text-lg font-bold outline-none focus:ring-2 ring-[#001f3f]/20" />
         </div>
         <div className="space-y-2">
           <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Data</label>
@@ -143,16 +151,16 @@ const EventFormView: React.FC<{
         {!initialData && (
           <div className="bg-indigo-50 p-6 rounded-[32px] border border-indigo-100 flex items-center justify-between">
             <div className="flex-1">
-              <h4 className="font-bold text-indigo-900 text-sm">Importar Base ({baseCount})</h4>
+              <h4 className="font-bold text-[#001f3f] text-sm">Importar Base ({baseCount})</h4>
               <p className="text-[10px] text-indigo-500 font-bold uppercase">Iniciar com nomes registrados</p>
             </div>
-            <button onClick={() => setImportPeople(!importPeople)} className={`w-12 h-6 rounded-full transition-colors relative ${importPeople ? 'bg-indigo-600' : 'bg-gray-300'}`}>
+            <button onClick={() => setImportPeople(!importPeople)} className={`w-12 h-6 rounded-full transition-colors relative ${importPeople ? 'bg-[#001f3f]' : 'bg-gray-300'}`}>
                <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${importPeople ? 'left-7' : 'left-1'}`} />
             </button>
           </div>
         )}
         <div className="pt-4 space-y-3">
-          <button onClick={() => name && date && onSubmit(name, date, importPeople)} className="w-full bg-indigo-600 text-white font-black py-5 rounded-[32px] shadow-xl shadow-indigo-200 active:scale-95 transition-all">SALVAR REGISTRO</button>
+          <button onClick={() => name && date && onSubmit(name, date, importPeople)} className="w-full bg-[#001f3f] text-white font-black py-5 rounded-[32px] shadow-xl shadow-[#001f3f]/20 active:scale-95 transition-all uppercase tracking-widest">SALVAR REGISTRO</button>
           {onDelete && (
              <button onClick={onDelete} className="w-full py-4 text-rose-500 font-bold uppercase text-[10px] flex items-center justify-center gap-2"><Trash2 size={14}/> Excluir Permanente</button>
           )}
@@ -164,23 +172,23 @@ const EventFormView: React.FC<{
 
 const BottomNav: React.FC<{ active: ViewState, onChange: (v: ViewState) => void }> = ({ active, onChange }) => (
   <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-1 py-2 flex justify-around items-center z-20">
-    <button onClick={() => onChange('events')} className={`flex flex-col items-center gap-1 flex-1 ${active === 'events' ? 'text-indigo-600' : 'text-gray-400'}`}>
+    <button onClick={() => onChange('events')} className={`flex flex-col items-center gap-1 flex-1 ${active === 'events' ? 'text-[#001f3f]' : 'text-gray-400'}`}>
       <Home size={20} />
       <span className="text-[9px] font-bold">Início</span>
     </button>
-    <button onClick={() => onChange('database')} className={`flex flex-col items-center gap-1 flex-1 ${active === 'database' ? 'text-indigo-600' : 'text-gray-400'}`}>
+    <button onClick={() => onChange('database')} className={`flex flex-col items-center gap-1 flex-1 ${active === 'database' ? 'text-[#001f3f]' : 'text-gray-400'}`}>
       <Database size={20} />
       <span className="text-[9px] font-bold">Base</span>
     </button>
-    <button onClick={() => onChange('reports')} className={`flex flex-col items-center gap-1 flex-1 ${active === 'reports' ? 'text-indigo-600' : 'text-gray-400'}`}>
+    <button onClick={() => onChange('reports')} className={`flex flex-col items-center gap-1 flex-1 ${active === 'reports' ? 'text-[#001f3f]' : 'text-gray-400'}`}>
       <FileDown size={20} />
       <span className="text-[9px] font-bold">Exportar</span>
     </button>
-    <button onClick={() => onChange('global')} className={`flex flex-col items-center gap-1 flex-1 ${active === 'global' ? 'text-indigo-600' : 'text-gray-400'}`}>
+    <button onClick={() => onChange('global')} className={`flex flex-col items-center gap-1 flex-1 ${active === 'global' ? 'text-[#001f3f]' : 'text-gray-400'}`}>
       <Globe size={20} />
       <span className="text-[9px] font-bold">Todos</span>
     </button>
-    <button onClick={() => onChange('stats')} className={`flex flex-col items-center gap-1 flex-1 ${active === 'stats' ? 'text-indigo-600' : 'text-gray-400'}`}>
+    <button onClick={() => onChange('stats')} className={`flex flex-col items-center gap-1 flex-1 ${active === 'stats' ? 'text-[#001f3f]' : 'text-gray-400'}`}>
       <BarChart2 size={20} />
       <span className="text-[9px] font-bold">Geral</span>
     </button>
@@ -376,11 +384,14 @@ const App: React.FC = () => {
 
       {view === 'events' && (
         <>
-          <Header title={<Logo />} />
+          <Header title={<CheckGLLogo variant="white" />} />
           <div className="p-4 flex-1 overflow-y-auto no-scrollbar space-y-4">
-             <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex flex-col items-center gap-3 mb-2">
-                <img src="https://generativelanguage.googleapis.com/v1beta/files/input_file_0.png" className="h-20 w-auto object-contain" alt="CHECK - GL" />
-                <h2 className="text-xs font-black text-[#001f3f] uppercase tracking-widest">Registros de Presença</h2>
+             <div className="bg-white p-8 rounded-[40px] shadow-sm border border-gray-100 flex flex-col items-center gap-4 mb-2 animate-in fade-in duration-700">
+                <CheckGLLogo className="scale-125 mb-2" />
+                <div className="text-center">
+                  <h2 className="text-sm font-black text-[#001f3f] uppercase tracking-widest">Gerenciador de Assiduidade</h2>
+                  <p className="text-[10px] text-gray-400 font-bold uppercase mt-1 tracking-tighter">Eventos • Ensaios • Reuniões</p>
+                </div>
              </div>
              {events.length === 0 ? (
                 <div className="text-center py-20 bg-white rounded-3xl border-2 border-dashed border-gray-200"><Calendar className="mx-auto text-gray-200 mb-4" size={48} /><p className="text-gray-400 font-medium">Nenhum evento registrado.</p></div>
@@ -415,7 +426,7 @@ const App: React.FC = () => {
               <div className="bg-amber-50 p-4 rounded-3xl border border-amber-100 text-center"><div className="text-2xl font-black text-amber-600">{selectedEvent.attendees.filter(a => a.status === AttendanceStatus.JUSTIFIED).length}</div><div className="text-[10px] font-bold uppercase text-amber-600">Justif.</div></div>
             </div>
             <div className="space-y-3">
-              <div className="flex items-center justify-between px-2"><h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{formatDate(selectedEvent.date)}</h3><button onClick={() => { const name = prompt('Nome extra:'); if(name) setEvents(prev => prev.map(e => e.id === selectedEvent.id ? {...e, attendees: [...e.attendees, {id: crypto.randomUUID(), name, status: AttendanceStatus.ABSENT}].sort((a,b) => a.name.localeCompare(b.name))} : e)); }} className="text-indigo-600 text-[10px] font-black uppercase tracking-tight">+ Adicionar Nome</button></div>
+              <div className="flex items-center justify-between px-2"><h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{formatDate(selectedEvent.date)}</h3><button onClick={() => { const name = prompt('Nome extra:'); if(name) setEvents(prev => prev.map(e => e.id === selectedEvent.id ? {...e, attendees: [...e.attendees, {id: crypto.randomUUID(), name, status: AttendanceStatus.ABSENT}].sort((a,b) => a.name.localeCompare(b.name))} : e)); }} className="text-[#001f3f] text-[10px] font-black uppercase tracking-tight">+ Adicionar Nome</button></div>
               {selectedEvent.attendees.map(attendee => (
                 <div key={attendee.id} className="bg-white p-4 rounded-3xl border border-gray-100 shadow-sm flex flex-col gap-3 animate-in fade-in">
                   <div className="flex items-center justify-between"><h4 className="font-bold text-gray-800">{attendee.name}</h4><button onClick={() => setEvents(prev => prev.map(e => e.id === selectedEvent.id ? {...e, attendees: e.attendees.filter(a => a.id !== attendee.id)} : e))} className="text-gray-300 hover:text-rose-500 transition-colors p-1"><Trash2 size={16} /></button></div>
@@ -439,7 +450,7 @@ const App: React.FC = () => {
         <>
           <Header title="Lista Mestra" />
           <div className="p-4 flex-1 overflow-y-auto no-scrollbar space-y-4">
-            <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100"><p className="text-[10px] text-gray-400 mb-4 font-black uppercase tracking-widest">Novo Integrante</p><div className="flex gap-2"><input id="new-person" type="text" placeholder="Nome completo..." className="flex-1 bg-gray-50 border-none p-4 rounded-2xl text-sm outline-none focus:ring-2 ring-indigo-500/20" onKeyDown={(e) => e.key === 'Enter' && handleAddPerson()} /><button onClick={handleAddPerson} className="bg-indigo-600 text-white p-4 rounded-2xl active:scale-95 transition-all"><UserPlus size={20} /></button></div></div>
+            <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100"><p className="text-[10px] text-gray-400 mb-4 font-black uppercase tracking-widest">Novo Integrante</p><div className="flex gap-2"><input id="new-person" type="text" placeholder="Nome completo..." className="flex-1 bg-gray-50 border-none p-4 rounded-2xl text-sm outline-none focus:ring-2 ring-[#001f3f]/20" onKeyDown={(e) => e.key === 'Enter' && handleAddPerson()} /><button onClick={handleAddPerson} className="bg-[#001f3f] text-white p-4 rounded-2xl active:scale-95 transition-all"><UserPlus size={20} /></button></div></div>
             <div className="space-y-3 px-1"><h3 className="text-xs font-black text-gray-400 uppercase tracking-widest">Integrantes Cadastrados ({people.length})</h3>{people.map(person => (<div key={person.id} className="bg-white p-4 rounded-3xl border border-gray-50 flex items-center justify-between shadow-sm animate-in slide-in-from-left"><p className="font-bold text-gray-700">{person.name}</p><button onClick={() => setPeople(people.filter(p => p.id !== person.id))} className="text-gray-300 hover:text-rose-500 p-2"><Trash2 size={18} /></button></div>))}</div>
           </div>
         </>
@@ -452,17 +463,17 @@ const App: React.FC = () => {
              <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 space-y-4">
                 <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest flex items-center gap-2"><Settings size={14}/> Dados do Cabeçalho</h3>
                 <div className="grid grid-cols-1 gap-2">
-                   <input type="text" placeholder="Grupo de Louvor/Pólo" value={headerInfo.louvorPolo} onChange={e => setHeaderInfo({...headerInfo, louvorPolo: e.target.value})} className="w-full bg-gray-50 border-none p-3 rounded-xl text-xs outline-none focus:ring-1 ring-indigo-500" />
-                   <input type="text" placeholder="Pastor Responsável" value={headerInfo.pastor} onChange={e => setHeaderInfo({...headerInfo, pastor: e.target.value})} className="w-full bg-gray-50 border-none p-3 rounded-xl text-xs outline-none focus:ring-1 ring-indigo-500" />
-                   <input type="text" placeholder="1º Responsável" value={headerInfo.resp1} onChange={e => setHeaderInfo({...headerInfo, resp1: e.target.value})} className="w-full bg-gray-50 border-none p-3 rounded-xl text-xs outline-none focus:ring-1 ring-indigo-500" />
-                   <input type="text" placeholder="2º Responsável" value={headerInfo.resp2} onChange={e => setHeaderInfo({...headerInfo, resp2: e.target.value})} className="w-full bg-gray-50 border-none p-3 rounded-xl text-xs outline-none focus:ring-1 ring-indigo-500" />
-                   <input type="text" placeholder="Secretaria(o)" value={headerInfo.secretaria} onChange={e => setHeaderInfo({...headerInfo, secretaria: e.target.value})} className="w-full bg-gray-50 border-none p-3 rounded-xl text-xs outline-none focus:ring-1 ring-indigo-500" />
+                   <input type="text" placeholder="Grupo de Louvor/Pólo" value={headerInfo.louvorPolo} onChange={e => setHeaderInfo({...headerInfo, louvorPolo: e.target.value})} className="w-full bg-gray-50 border-none p-3 rounded-xl text-xs outline-none focus:ring-1 ring-[#001f3f]" />
+                   <input type="text" placeholder="Pastor Responsável" value={headerInfo.pastor} onChange={e => setHeaderInfo({...headerInfo, pastor: e.target.value})} className="w-full bg-gray-50 border-none p-3 rounded-xl text-xs outline-none focus:ring-1 ring-[#001f3f]" />
+                   <input type="text" placeholder="1º Responsável" value={headerInfo.resp1} onChange={e => setHeaderInfo({...headerInfo, resp1: e.target.value})} className="w-full bg-gray-50 border-none p-3 rounded-xl text-xs outline-none focus:ring-1 ring-[#001f3f]" />
+                   <input type="text" placeholder="2º Responsável" value={headerInfo.resp2} onChange={e => setHeaderInfo({...headerInfo, resp2: e.target.value})} className="w-full bg-gray-50 border-none p-3 rounded-xl text-xs outline-none focus:ring-1 ring-[#001f3f]" />
+                   <input type="text" placeholder="Secretaria(o)" value={headerInfo.secretaria} onChange={e => setHeaderInfo({...headerInfo, secretaria: e.target.value})} className="w-full bg-gray-50 border-none p-3 rounded-xl text-xs outline-none focus:ring-1 ring-[#001f3f]" />
                 </div>
              </div>
              <div className="space-y-3">
                <h3 className="text-xs font-black text-gray-400 uppercase tracking-widest px-1">Exportar por Título</h3>
                {uniqueTitles.map(title => (
-                  <button key={title} onClick={() => { setExportTargetTitle(title); setShowExportModal(true); }} className="w-full bg-white p-5 rounded-3xl shadow-sm border border-gray-100 flex items-center justify-between active:scale-95 transition-all text-left"><div><h4 className="font-bold text-gray-800">{title}</h4><p className="text-[10px] text-indigo-500 font-bold uppercase">{events.filter(e => e.name === title).length} registros</p></div><Download size={20} className="text-indigo-500" /></button>
+                  <button key={title} onClick={() => { setExportTargetTitle(title); setShowExportModal(true); }} className="w-full bg-white p-5 rounded-3xl shadow-sm border border-gray-100 flex items-center justify-between active:scale-95 transition-all text-left"><div><h4 className="font-bold text-gray-800">{title}</h4><p className="text-[10px] text-[#001f3f] font-bold uppercase">{events.filter(e => e.name === title).length} registros</p></div><Download size={20} className="text-[#001f3f]" /></button>
                ))}
              </div>
           </div>
@@ -473,11 +484,11 @@ const App: React.FC = () => {
         <>
           <Header title="Consolidado Geral" />
           <div className="p-6 flex-1 flex flex-col items-center justify-center text-center space-y-6">
-             <div className="w-24 h-24 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center shadow-lg animate-bounce">
+             <div className="w-24 h-24 bg-indigo-50 text-[#001f3f] rounded-full flex items-center justify-center shadow-lg animate-bounce">
                 <Globe size={48} />
              </div>
-             <div>
-                <img src="https://generativelanguage.googleapis.com/v1beta/files/input_file_0.png" alt="CHECK - GL" className="h-16 w-auto mx-auto mb-4 opacity-50" />
+             <div className="animate-in fade-in zoom-in duration-500">
+                <CheckGLLogo className="mb-6 justify-center scale-150" />
                 <h3 className="text-xl font-black text-gray-800">Todos os Relatórios</h3>
                 <p className="text-sm text-gray-400 px-10 mt-2 leading-relaxed">Gere um documento único com todos os ensaios e todos os títulos registrados no app.</p>
              </div>
