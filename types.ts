@@ -23,4 +23,5 @@ export interface Event {
   attendees: Attendee[];
 }
 
-export type ViewState = 'events' | 'create' | 'details' | 'stats' | 'database' | 'reports' | 'global';
+// Added 'edit' to the ViewState union type to resolve type errors in App.tsx (lines 421 and 445)
+export type ViewState = 'events' | 'create' | 'details' | 'stats' | 'database' | 'reports' | 'global' | 'edit';
