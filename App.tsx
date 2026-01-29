@@ -171,26 +171,26 @@ const EventFormView: React.FC<{
 };
 
 const BottomNav: React.FC<{ active: ViewState, onChange: (v: ViewState) => void }> = ({ active, onChange }) => (
-  <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-1 py-2 flex justify-around items-center z-20">
-    <button onClick={() => onChange('events')} className={`flex flex-col items-center gap-1 flex-1 ${active === 'events' ? 'text-[#001f3f]' : 'text-gray-400'}`}>
-      <Home size={20} />
-      <span className="text-[9px] font-bold">Início</span>
+  <nav className="fixed bottom-6 left-4 right-4 bg-white border border-gray-100 px-2 py-3 flex justify-around items-center z-20 rounded-[32px] shadow-2xl">
+    <button onClick={() => onChange('events')} className={`flex flex-col items-center gap-1 flex-1 transition-all active:scale-90 ${active === 'events' ? 'text-[#001f3f]' : 'text-gray-400'}`}>
+      <Home size={22} />
+      <span className="text-[9px] font-black uppercase tracking-tighter">Início</span>
     </button>
-    <button onClick={() => onChange('database')} className={`flex flex-col items-center gap-1 flex-1 ${active === 'database' ? 'text-[#001f3f]' : 'text-gray-400'}`}>
-      <Database size={20} />
-      <span className="text-[9px] font-bold">Base</span>
+    <button onClick={() => onChange('database')} className={`flex flex-col items-center gap-1 flex-1 transition-all active:scale-90 ${active === 'database' ? 'text-[#001f3f]' : 'text-gray-400'}`}>
+      <Database size={22} />
+      <span className="text-[9px] font-black uppercase tracking-tighter">Base</span>
     </button>
-    <button onClick={() => onChange('reports')} className={`flex flex-col items-center gap-1 flex-1 ${active === 'reports' ? 'text-[#001f3f]' : 'text-gray-400'}`}>
-      <FileDown size={20} />
-      <span className="text-[9px] font-bold">Exportar</span>
+    <button onClick={() => onChange('reports')} className={`flex flex-col items-center gap-1 flex-1 transition-all active:scale-90 ${active === 'reports' ? 'text-[#001f3f]' : 'text-gray-400'}`}>
+      <FileDown size={22} />
+      <span className="text-[9px] font-black uppercase tracking-tighter">Exportar</span>
     </button>
-    <button onClick={() => onChange('global')} className={`flex flex-col items-center gap-1 flex-1 ${active === 'global' ? 'text-[#001f3f]' : 'text-gray-400'}`}>
-      <Globe size={20} />
-      <span className="text-[9px] font-bold">Todos</span>
+    <button onClick={() => onChange('global')} className={`flex flex-col items-center gap-1 flex-1 transition-all active:scale-90 ${active === 'global' ? 'text-[#001f3f]' : 'text-gray-400'}`}>
+      <Globe size={22} />
+      <span className="text-[9px] font-black uppercase tracking-tighter">Todos</span>
     </button>
-    <button onClick={() => onChange('stats')} className={`flex flex-col items-center gap-1 flex-1 ${active === 'stats' ? 'text-[#001f3f]' : 'text-gray-400'}`}>
-      <BarChart2 size={20} />
-      <span className="text-[9px] font-bold">Geral</span>
+    <button onClick={() => onChange('stats')} className={`flex flex-col items-center gap-1 flex-1 transition-all active:scale-90 ${active === 'stats' ? 'text-[#001f3f]' : 'text-gray-400'}`}>
+      <BarChart2 size={22} />
+      <span className="text-[9px] font-black uppercase tracking-tighter">Geral</span>
     </button>
   </nav>
 );
@@ -350,7 +350,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen pb-20 flex flex-col max-w-md mx-auto bg-gray-50 relative overflow-hidden">
+    <div className="min-h-screen pb-32 flex flex-col max-w-md mx-auto bg-gray-50 relative overflow-hidden">
       
       {showExportModal && (
         <div className="fixed inset-0 z-50 flex items-end justify-center p-4">
@@ -404,7 +404,7 @@ const App: React.FC = () => {
                ))
              )}
           </div>
-          <button onClick={() => setView('create')} className="fixed bottom-24 right-6 bg-[#001f3f] text-white p-5 rounded-3xl shadow-2xl active:scale-90 transition-transform"><Plus size={28} strokeWidth={3} /></button>
+          <button onClick={() => setView('create')} className="fixed bottom-32 right-6 bg-[#001f3f] text-white p-5 rounded-3xl shadow-2xl active:scale-90 transition-transform z-30"><Plus size={28} strokeWidth={3} /></button>
         </>
       )}
 
